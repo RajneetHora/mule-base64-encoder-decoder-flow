@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:json="http://www.mulesoft.org/schema/mule/json" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:spring="http://www.springframework.org/schema/beans" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd">
+    <flow name="mule-choice-router-exampleFlow">
+        <http:listener config-ref="HTTP_Listener_Configuration" path="/choice-router" allowedMethods="POST" doc:name="HTTP"/>
+        <byte-array-to-string-transformer doc:name="Byte Array to String"/>
+        <logger message="#[json:choice]" level="INFO" doc:name="Logger"/>
+        <set-variable variableName="Choice" value="#[json:choice]" doc:name="Choice"/>
+        <choice doc:name="Choice">
+            <when expression="flowVars['Choice']==&quot;true&quot;">
+                <set-payload value="#['True']" doc:name="Choice - true"/>
+            </when>
+            <otherwise>
+                <set-payload value="#['false']" doc:name="Choice - Default"/>
+            </otherwise>
+        </choice>
+    </flow>
+</mule>
